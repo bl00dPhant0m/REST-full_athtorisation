@@ -17,16 +17,18 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 public class SecurityConfig {
     final CustomUserDetailsService customUserDetailsService;
     @Bean
-    SecurityFilterChain springSecurityFilterChain(HttpSecurity http) throws Exception {
+    SecurityFilterChain defolterSecurityFilterChain(HttpSecurity http) throws Exception {
         http.authorizeHttpRequests(auth->auth
-                .requestMatchers("/").permitAll()
-                .requestMatchers("/").authenticated()
-                .requestMatchers("/").hasRole("USER")
-                .requestMatchers("/").hasRole("ADMIN")
-                .requestMatchers("/").hasAnyRole("MODERATOR", "ADMIN")
+                .requestMatchers("/api/public", "/api/create-account").permitAll()
+                .requestMatchers("/api/all-roles").authenticated()
+                .requestMatchers("/api/user").hasRole("USER")
+                .requestMatchers("/api/admin").hasRole("ADMIN")
+                .requestMatchers("/api/admin-moderator").hasAnyRole("MODERATOR", "ADMIN")
 
         );
         http.csrf(AbstractHttpConfigurer::disable);
+        http.httpBasic();
+
 
         return http.build();
     }

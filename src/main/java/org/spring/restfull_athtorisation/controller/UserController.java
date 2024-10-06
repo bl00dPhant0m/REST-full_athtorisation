@@ -1,13 +1,18 @@
 package org.spring.restfull_athtorisation.controller;
 
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import lombok.RequiredArgsConstructor;
+import org.spring.restfull_athtorisation.Model.User;
+import org.spring.restfull_athtorisation.service.UserService;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.bind.annotation.*;
 
 //curl -u username:password http://localhost:8080/api/admin
 @RestController
 @RequestMapping(value = "/api")
+@RequiredArgsConstructor
 public class UserController {
+    private final UserService userService;
+    private final PasswordEncoder passwordEncoder;
 
     @GetMapping("/public")
     public String publicMethodGet() {
@@ -24,9 +29,9 @@ public class UserController {
         return "Эта страница доступна для админов";
     }
 
-    @GetMapping("/admin-user")
-    public String adminUserMethodGet() {
-        return "Эта страница доступна для админов и юзеров";
+    @GetMapping("/admin-moderator")
+    public String adminModeratorMethodGet() {
+        return "Эта страница доступна для админов и модераторов";
     }
 
     @GetMapping("/all-roles")
@@ -34,5 +39,12 @@ public class UserController {
         return "Эта страница доступна для авторизированных пользователей";
     }
 
+    @PostMapping(value = "/create-account")
+    public String createAccount(@RequestBody User user) {
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        System.out.println(user.getRoles());
+        userService.saveUser(user);
+        return "Account created successfully";
+    }
 
 }
