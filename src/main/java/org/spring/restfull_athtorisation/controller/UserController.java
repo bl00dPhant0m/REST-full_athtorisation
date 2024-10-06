@@ -2,7 +2,6 @@ package org.spring.restfull_athtorisation.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.spring.restfull_athtorisation.Model.User;
-import org.spring.restfull_athtorisation.service.UserService;
 import org.spring.restfull_athtorisation.service.UserServiceImpl;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
